@@ -1,25 +1,46 @@
 class MyHashMap {
 public:
-    vector<int> v;
+    int size =10000;
+    vector<list<pair<int,int>>> v;
     MyHashMap() {
-        v.resize(1000001,-1);
+        v.resize(size);
         
     }
     
-    void put(int k, int value) {
-        v[k]=value;
+    void put(int key, int value) {
+        int idx = key%size;
+        auto &chain =v[idx];
+        for(auto &p:chain){
+            if(p.first==key){
+                p.second=value;
+                return;
+            }
+        }
+        chain.emplace_back(key,value);
         
     }
     
     int get(int key) {
-
-        return v[key];
+         int idx = key%size;
+        auto &chain =v[idx];
+        for(auto &p:chain){
+            if(p.first==key){
+                return p.second;
+            }
+        }
+        return -1;
         
     }
     
     void remove(int key) {
-        if(v[key]!=-1){
-            v[key]=-1;
+        int idx = key%size;
+        auto &chain =v[idx];
+        for(auto it=chain.begin();it!=chain.end();it++){
+            if(it->first==key){
+                chain.erase(it);
+                return;
+            }
+            
         }
         
     }
