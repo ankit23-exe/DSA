@@ -1,25 +1,42 @@
 class MyHashSet {
 public:
-    vector<bool> v;
+    vector<list<int>> bucket;
+    int M;
+
+    int getdx(int key){
+        return key%M;
+    }
     MyHashSet() {
-        v.resize(1000001,false);
-        
+        M=15000;
+        bucket.resize(M,list<int>{});
     }
     
     void add(int key) {
-        v[key]=true;
+        int idx =getdx(key);
+        auto itr=find(bucket[idx].begin(),bucket[idx].end(),key);
+        if(itr==bucket[idx].end()){
+            bucket[idx].push_back(key);
+        }
         
     }
     
     void remove(int key) {
-        if(v[key]==true)
-            v[key]=false;
+        int idx =getdx(key);
+        auto itr=find(bucket[idx].begin(),bucket[idx].end(),key);
+        if(itr!=bucket[idx].end()){
+            bucket[idx].erase(itr);
+        }
         
     }
     
     bool contains(int key) {
-        return v[key];
+        int idx =getdx(key);
+        auto itr=find(bucket[idx].begin(),bucket[idx].end(),key);
+        if(itr!=bucket[idx].end()){
+            return true;
+        }
         
+    return false;   
     }
 };
 
