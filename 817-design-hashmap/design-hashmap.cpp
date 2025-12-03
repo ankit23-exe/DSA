@@ -1,23 +1,27 @@
 class MyHashMap {
-private:
-    static const int MAXK = 1000000;      // maximum possible key
-    std::vector<int> table;               // direct-address table
-
 public:
-    MyHashMap() : table(MAXK + 1, -1) {
-        // initialize all entries to -1 (meaning "not present")
+    vector<int> v;
+    MyHashMap() {
+        v.resize(1000001,-1);
+        
     }
     
-    void put(int key, int value) {
-        table[key] = value;
+    void put(int k, int value) {
+        v[k]=value;
+        
     }
     
     int get(int key) {
-        return table[key]; // returns -1 if absent, otherwise the value
+
+        return v[key];
+        
     }
     
     void remove(int key) {
-        table[key] = -1;   // set back to "not present"
+        if(v[key]!=-1){
+            v[key]=-1;
+        }
+        
     }
 };
 
