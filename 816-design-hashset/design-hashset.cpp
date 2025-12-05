@@ -7,7 +7,7 @@ public:
         return key%M;
     }
     MyHashSet() {
-        M=15000;
+        M=769;
         bucket.resize(M,list<int>{});
     }
     
