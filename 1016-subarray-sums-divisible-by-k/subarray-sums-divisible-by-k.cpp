@@ -10,10 +10,8 @@ public:
             int r=(cumsum%k)>=0?cumsum%k:(cumsum%k) +k; 
             if(mp.find(r)!=mp.end()){
                 ans+=mp[r];
-                mp[r]++;
-            }else{
-                mp[r]=1;
-            }
+            } 
+              mp[r]++;
             
             
         }
