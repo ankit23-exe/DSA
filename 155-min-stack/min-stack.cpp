@@ -1,45 +1,34 @@
 class MinStack {
 public:
-    list<int> ll;
-    int min=INT_MAX;
+    std::stack<int> stack;
+    std::stack<int> minstack;
     MinStack() {
         
     }
-    void minfinder(){
-        min=INT_MAX;
-
-        for(auto l:ll){
-            if(min>l){
-                min=l;
-            }
-
-        }
-    }
     
     void push(int val) {
-        ll.push_front(val);
-        if(min>val){
-            min=val;
-        }   
+        stack.push(val);
+        if(minstack.empty() || val <= minstack.top()){
+            minstack.push(val);
+        }
     }
     
     void pop() {
-        if(ll.front()==min){
-            ll.erase(ll.begin());
-            minfinder();
-        }else{
-            ll.erase(ll.begin());
+        if(stack.top()==minstack.top()){
+            minstack.pop();
         }
+        stack.pop();
         
     }
     
     int top() {
-        return ll.front();
+        return stack.top();
         
     }
     
     int getMin() {
-        return min;
+        return minstack.top();
+        
     }
 };
 
