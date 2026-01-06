@@ -11,37 +11,30 @@
  */
 class Solution {
 public:
+    map<int,int> mp;  //level-> sum;
+
+    void inorder(TreeNode* root, int level){
+        if(root==nullptr){
+            return ;
+        }
+        mp[level]+=root->val;
+        inorder(root->left,level+1);
+        inorder(root->right,level+1);
+        return;
+    }
     int maxLevelSum(TreeNode* root) {
-        queue<TreeNode*> que;   // Using BFS search
-        int maxsum =INT_MIN;
+
+        inorder(root,1);
+        int maxsum=INT_MIN;
         int resultlevel=0;
-
-        int currlevel=1;
-        que.push(root);
-
-        while(!que.empty()){
-            int n = que.size();
-            int sum =0;
-            while(n>0){
-                TreeNode* temp = que.front();
-                que.pop();
-                sum+=temp->val;
-
-                if(temp->left){
-                    que.push(temp->left);
-                }
-                if(temp->right){
-                    que.push(temp->right);
-                }
-                n--;
+        for(auto m:mp){
+            if(m.second>maxsum){
+                maxsum=m.second;
+                resultlevel=m.first;
             }
-            if(sum>maxsum){
-                maxsum=sum;
-                resultlevel=currlevel;
-            }
-             currlevel++;
         }
 
         return resultlevel;
+
     }
 };
