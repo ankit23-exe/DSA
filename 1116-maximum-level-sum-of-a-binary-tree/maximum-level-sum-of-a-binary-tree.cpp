@@ -14,23 +14,23 @@ public:
     map<int,int> mp;  //level-> sum;
 
     void inorder(TreeNode* root, int level){
-        if(root==nullptr){
+        if(!root){
             return ;
         }
         mp[level]+=root->val;
         inorder(root->left,level+1);
         inorder(root->right,level+1);
-        return;
+        
     }
     int maxLevelSum(TreeNode* root) {
 
         inorder(root,1);
         int maxsum=INT_MIN;
         int resultlevel=0;
-        for(auto m:mp){
-            if(m.second>maxsum){
-                maxsum=m.second;
-                resultlevel=m.first;
+        for(auto it:mp){
+            if(it.second>maxsum){
+                maxsum=it.second;
+                resultlevel=it.first;
             }
         }
 
