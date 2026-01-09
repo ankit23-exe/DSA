@@ -11,36 +11,28 @@
  */
 class Solution {
 public:
-    int maxdept=0;
-
-    void deptfinder(TreeNode* root,int d){
+    
+    pair<int,TreeNode*> lca_with_deepnode(TreeNode* root){
         if(root==nullptr){
-            return;
+            return {0,nullptr};
         }
-        maxdept=max(maxdept,d);
-        deptfinder(root->left,d+1);
-        deptfinder(root->right,d+1);
-    }
-
-    TreeNode* lca_with_deepnode(TreeNode* root,int maxd,int d){
-        if(root==nullptr){
-            return nullptr;
+       
+        pair<int,TreeNode*> left=lca_with_deepnode(root->left);
+        pair<int,TreeNode*> right=lca_with_deepnode(root->right);
+        if(left.first == right.first){
+            return {left.first+1,root};
         }
-        if(d==maxd){   //current ka dept == maxdept
-            return root;
+        if(left.first>right.first){
+            return {left.first+1,left.second};
+        }else{
+             return {right.first+1,right.second};
         }
-        TreeNode* left=lca_with_deepnode(root->left,maxd,d+1);
-        TreeNode* right=lca_with_deepnode(root->right,maxd,d+1);
-        if(left!=nullptr && right!=nullptr){
-            return root;
-        }
-        return left==nullptr?right:left;
 
     }
 
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        deptfinder(root,0);
-        return lca_with_deepnode(root,maxdept,0);
+        ;
+        return lca_with_deepnode(root).second;
 
     }
 };
