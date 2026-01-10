@@ -14,10 +14,10 @@ public:
             return t[i][j];
         }
        
-        if(i>=M)  return s2[j] + solve(s1,s2,i,j+1);   
-        if(j>=N) return s1[i] + solve(s1,s2,i+1,j);
+        if(i>=M)  return t[i][j]= s2[j] + solve(s1,s2,i,j+1);   
+        if(j>=N) return t[i][j]= s1[i] + solve(s1,s2,i+1,j);
          if(s1[i]==s2[j]){
-            return solve(s1,s2,i+1,j+1);
+            return t[i][j]= solve(s1,s2,i+1,j+1);
         }
         int delete_s1_i = s1[i] + solve(s1,s2,i+1,j);
         int delete_s2_j = s2[j] + solve(s1,s2,i,j+1);
