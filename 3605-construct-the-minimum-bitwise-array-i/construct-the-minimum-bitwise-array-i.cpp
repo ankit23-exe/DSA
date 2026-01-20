@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> minBitwiseArray(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n,-1);
+
+        for(int i =0;i<n;i++){   // looping over nums
+            for(int j = 1;j<=nums[i]-1;j++){   //finding ans[i]
+                if((j | (j+1)) == nums[i]){
+                    ans[i]=j;
+                    break;
+                }
+            }
+
+        }
+        return ans;
+    }
+};
