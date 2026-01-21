@@ -7,33 +7,33 @@ public:
     }
     
     void push(int x) {
-        while(!s1.empty()){
-            s2.push(s1.top());
-            s1.pop();
-        }
-        s1.push(x);
-        while(!s2.empty()){
-            s1.push(s2.top());
-            s2.pop();
+        if(s1.empty()){
+            s1.push(x);
+        }else{
+            while(!s1.empty()){
+                s2.push(s1.top());
+                s1.pop();
+            }
+            s2.push(x);
+            while(!s2.empty()){
+                s1.push(s2.top());
+                s2.pop();
+            }
         }
     }
     
     int pop() {
-
-        int v=s1.top();
+        int v1 = s1.top();
         s1.pop();
-        return v;
-        
+        return v1;
     }
     
     int peek() {
         return s1.top();
-        
     }
     
     bool empty() {
         return s1.empty();
-        
     }
 };
 
