@@ -1,18 +1,17 @@
 class Solution {
 public:
-    int winner(int n, int k){
-        if(n==1){
-            return 0;
+    int findTheWinner(int n, int k) {
+        queue<int> q;
+        for(int i = 1;i<=n;i++){
+            q.push(i);
         }
-
-        int idx=winner(n-1,k);
-        idx=(idx+k)%n;
-        return idx;
-        
+        while(q.size()!= 1){
+            for(int i = 1;i<k;i++){
+                q.push(q.front()); // putting the first element to the end
+                q.pop();    
+            }
+            q.pop();
         }
-
-    int findTheWinner(int n, int k) {   //joseph recurrence
-        
-        return winner(n,k)+ 1; 
+        return q.front();
     }
 };
