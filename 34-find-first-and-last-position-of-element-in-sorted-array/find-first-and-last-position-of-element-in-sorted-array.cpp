@@ -1,27 +1,32 @@
 class Solution {
 public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        int n = nums.size();
-        vector<int> ans(2,-1);
-        if(n == 0) return ans;
-        //spotting first time
-        int i ;
-        for( i=0;i<n;i++ ){
-            if(nums[i]==target){
-                ans[0]=i;
-                break;
+    int find(vector<int>& nums, int target, int n,bool flag){
+        int ans=-1;
+        int l = 0;
+        int r= n-1;
+        while(l<=r){
+            int mid = l + (r-l)/2;
+            if(nums[mid]==target){
+                ans = mid;
+                if(flag){ //going right side
+                    l = mid+1;
+                }else{
+                    r = mid-1;
+                }
+
+            }else if(nums[mid]>target){
+                r = mid-1;
+            }else{
+                l = mid+1;
             }
-        }
-        for(i;i<n;i++){
-            if(nums[i]!=target){
-                ans[1]=i-1;
-                break;
-            }
-        }
-        if(ans[0]!= -1 && ans[1] == -1){
-            ans[1]=n-1;
         }
         return ans;
+    }
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int n= nums.size();
+        int left = find(nums,target,n,false);
+        int right = find(nums,target,n,true);
 
+        return {left,right};
     }
 };
