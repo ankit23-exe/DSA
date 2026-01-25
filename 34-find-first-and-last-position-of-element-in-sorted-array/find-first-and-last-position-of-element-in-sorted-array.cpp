@@ -1,48 +1,27 @@
 class Solution {
 public:
-    int findFirst(vector<int>& nums, int target) {
-        int left = 0, right = nums.size() - 1;
-        int pos = -1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (nums[mid] == target) {
-                pos = mid;
-                right = mid - 1;   // search left
-            }
-            else if (nums[mid] < target) {
-                left = mid + 1;
-            }
-            else {
-                right = mid - 1;
-            }
-        }
-        return pos;
-    }
-
-    int findLast(vector<int>& nums, int target) {
-        int left = 0, right = nums.size() - 1;
-        int pos = -1;
-
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-
-            if (nums[mid] == target) {
-                pos = mid;
-                left = mid + 1;   // search right
-            }
-            else if (nums[mid] < target) {
-                left = mid + 1;
-            }
-            else {
-                right = mid - 1;
-            }
-        }
-        return pos;
-    }
-
     vector<int> searchRange(vector<int>& nums, int target) {
-        return { findFirst(nums, target), findLast(nums, target) };
+        int n = nums.size();
+        vector<int> ans(2,-1);
+        if(n == 0) return ans;
+        //spotting first time
+        int i ;
+        for( i=0;i<n;i++ ){
+            if(nums[i]==target){
+                ans[0]=i;
+                break;
+            }
+        }
+        for(i;i<n;i++){
+            if(nums[i]!=target){
+                ans[1]=i-1;
+                break;
+            }
+        }
+        if(ans[0]!= -1 && ans[1] == -1){
+            ans[1]=n-1;
+        }
+        return ans;
+
     }
 };
