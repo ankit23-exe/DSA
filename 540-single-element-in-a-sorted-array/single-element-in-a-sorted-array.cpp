@@ -1,23 +1,22 @@
 class Solution {
 public:
     int singleNonDuplicate(vector<int>& nums) {
-        int low = 0, high = nums.size() - 1;
+        int n = nums.size();
 
-        while (low < high) {
-            int mid = low + (high - low) / 2;
+        int s = 0 ; 
+        int e = n-1;
 
-            // make mid even
-            if (mid % 2 == 1) mid--;
+        while(s<e){
+            int mid = s + (e-s)/2;
+            if(mid%2 == 1) mid--;
 
-            if (nums[mid] == nums[mid + 1]) {
-                // single element is on the right
-                low = mid + 2;
-            } else {
-                // single element is on the left (or mid itself)
-                high = mid;
+            if(nums[mid] == nums[mid+1]){
+                s = mid+2;
+            }else{
+                e = mid-1;
             }
-        }
 
-        return nums[low];
+        }
+        return nums[s];
     }
 };
