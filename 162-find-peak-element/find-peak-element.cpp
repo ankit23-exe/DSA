@@ -1,19 +1,24 @@
 class Solution {
 public:
     int findPeakElement(vector<int>& nums) {
-        int low = 0, high = nums.size() - 1;
+        int n = nums.size();
+        if(n==1 || nums[0]>nums[1]) return 0;
+        //checking first element 
+        if(nums[n-1]>nums[n-2]) return n-1;
 
-        while (low < high) {
-            int mid = low + (high - low) / 2;
-
-            if (nums[mid] > nums[mid + 1]) {
-                // peak is on the left (including mid)
-                high = mid;
-            } else {
-                // peak is on the right
-                low = mid + 1;
+        int s =1;
+        int e = n-2;
+        while(s<=e){
+            int mid = s+(e-s)/2;
+            if(nums[mid-1]<nums[mid] && nums[mid+1]<nums[mid] ){
+                return mid;
+            }else if(nums[mid-1]>nums[mid]){
+                e = mid-1;
+            }else{
+                s = mid+1;
             }
         }
-        return low; // or high (both same)
+        //kabhi nhi chalega 
+        return 0;
     }
 };
