@@ -1,44 +1,42 @@
-
 class Solution {
 public:
-    typedef pair<int, int> P;
-
     int minCost(int n, vector<vector<int>>& edges) {
-        unordered_map<int, vector<P>> adj;
+        //making adjancy list
+        vector<vector<pair<int,int>>> adj(n); //{{node,dist},{nod2,dist2}}
 
-        for(auto &edge : edges) {
-            int u  = edge[0];
-            int v  = edge[1];
-            int wt = edge[2];
-
-            adj[u].push_back({v, wt});
-            adj[v].push_back({u, 2*wt}); //reversed edge
+        for(auto &ed:edges){
+            int u = ed[0];
+            int v = ed[1];
+            int wt = ed[2];
+            adj[u].push_back({v,wt});
+            adj[v].push_back({u,2*wt});
         }
 
-        vector<int> result(n, INT_MAX);
-        result[0] = 0;
-        priority_queue<P, vector<P>, greater<P>> pq;
-        pq.push({0, 0}); //distance = 0, sourceNode = 0
+        //making priority_queue
+        priority_queue<pair<int,int>, vector<pair<int,int>>,greater<pair<int,int>>> pq; //it is a min heap for the source 
+        //pq --> {dist,node}
+        //source is 0
 
-        while(!pq.empty()) {
-            int d    = pq.top().first;
-		    int node = pq.top().second;
-		    pq.pop();
-            if(node == n-1)
-                return result[node];
+        vector<int> result(n,INT_MAX);
+        result[0]=0;
+        pq.push({0,0});
+        while(!pq.empty()){
+            int d = pq.top().first;
+            int node = pq.top().second;
+            pq.pop();
 
-		    for(auto &p : adj[node]) {
-
-                int adjNode = p.first;
-                int dist    = p.second;
-
-                if(d + dist < result[adjNode]) {
-                    result[adjNode] = d + dist;
-                    pq.push({d+dist, adjNode});
+            for(auto &p:adj[node]){
+                int adjnode= p.first;
+                int wt = p.second;
+                if(d+wt<result[adjnode]){
+                    result[adjnode]=d+wt;
+                    pq.push({d+wt,adjnode});
                 }
-		    }
+            }
         }
 
-        return -1;
+        if(result[n-1] == INT_MAX) return -1;
+        else  return result[n-1];   
+       
     }
 };
