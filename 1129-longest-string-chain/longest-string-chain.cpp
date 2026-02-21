@@ -1,53 +1,41 @@
 class Solution {
 public:
-    int n;
-    int t[1001][1001];
-    
-    bool predecessor(string& prev, string& curr) {
-        int M = prev.length();
-        int N = curr.length();
-        
-        if(M >= N || N-M != 1)
-            return false;
-        
-        int i = 0, j = 0;
-        while(i < M && j < N) {
-            if(prev[i] == curr[j]) {
-                i++;
+   int dp[1001][1001];
+    bool check(string &word1, string &word2) {
+        int len1 = word1.size();
+        int len2 = word2.size();
+        int k = 0;
+        for (int i = 0; i < len2; i++) {
+            if (k < len1 && word1[k] == word2[i]) {
+                k++;
             }
-            j++;
         }
-        return i==M;
+        if (k == len1 && len2-len1 == 1)
+            return true;
+        else
+            return false;
     }
-    
-    int lis(vector<string>& words, int prev_idx, int curr_idx) {
-       if(curr_idx == n)
-           return 0;
-        
-        if(prev_idx != -1 && t[prev_idx][curr_idx] != -1)
-            return t[prev_idx][curr_idx];
-        
-        int taken = 0;
-        if(prev_idx == -1 || predecessor(words[prev_idx], words[curr_idx]))
-            taken = 1 + lis(words, curr_idx, curr_idx+1);
-        
-        int not_taken = lis(words, prev_idx, curr_idx+1);
-        
-        if(prev_idx != -1)
-            t[prev_idx][curr_idx] =  max(taken, not_taken);
-        
-        return max(taken, not_taken);
-            
+    int solve(int i, int p, vector<string>& words) {
+
+        if (i >= words.size())
+            return 0;
+        if (dp[i][p + 1] != -1)
+            return dp[i][p + 1];
+        int take = 0;
+        if (p == -1 || check(words[p], words[i])) {
+            take = 1 + solve(i + 1, i, words);
+        }
+        int skip = solve(i + 1, p, words);
+
+        return dp[i][p + 1] = max(take, skip);
     }
-    
-    static bool myFunction(string& s1, string& s2) {
-        return s1.length() < s2.length();
-    }
-    
     int longestStrChain(vector<string>& words) {
-        memset(t, -1, sizeof(t));
-        n = words.size();
-        sort(begin(words), end(words), myFunction); 
-        return lis(words, -1, 0);
+
+        sort(words.begin(), words.end(), [](const string& a, const string& b) {
+            return a.size() < b.size();
+        });
+
+        memset(dp, -1, sizeof(dp));
+        return solve(0, -1, words);
     }
 };
