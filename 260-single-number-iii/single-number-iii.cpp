@@ -21,28 +21,16 @@ public:
 
         int mask = 1<<bitmaskcount;
 
-        vector<int> group1;
-        vector<int> group2;
+       int a = 0, b = 0;
 
-        for(auto &x:nums){
-            if(x & mask){
-                group1.push_back(x);
-            }else{
-                group2.push_back(x);
-            }
+        for(int x : nums){
+            if(x & mask)
+                a ^= x;
+            else
+                b ^= x;
         }
 
-        int c1 = 0;
-        for(auto x:group1){
-            c1 = c1 ^ x;
-        }
-
-        int c2 = 0;
-        for(auto x:group2){
-            c2 = c2 ^ x;
-        }
-
-        return {c1,c2};
+        return {a,b};
     }
 
 };
