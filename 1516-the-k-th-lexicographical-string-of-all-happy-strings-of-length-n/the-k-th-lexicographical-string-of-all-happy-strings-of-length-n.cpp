@@ -19,7 +19,7 @@ public:
         string temp = "";
         make(n,k,'x',temp,all_strings);
 
-        sort(all_strings.begin(),all_strings.end());
+        //sort(all_strings.begin(),all_strings.end());
         if(k>all_strings.size()){
             return "";
         }
