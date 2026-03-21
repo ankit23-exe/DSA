@@ -1,42 +1,47 @@
 class Solution {
 public:
+    void helper(int i, int j, int k, vector<vector<int>>& ans,
+                vector<vector<int>>& grid) {
+        set<int> temp;
+        for (int r = i; r < i + k; r++) {
+            for (int c = j; c < j + k; c++) {
+                temp.insert(grid[r][c]);
+            }
+        }
+
+        int finalval = INT_MAX;
+        if (temp.size() == 1) {
+            ans[i][j] = 0;
+            return;
+        }
+       
+        auto it = temp.begin();
+        auto prev = it;
+        it++;
+
+        for (; it != temp.end(); it++) {
+            finalval = min(finalval, *it - *prev);
+            prev = it;
+        }
+
+        ans[i][j] = finalval;
+    }
     vector<vector<int>> minAbsDiff(vector<vector<int>>& grid, int k) {
         int m = grid.size();
         int n = grid[0].size();
-        
-        vector<vector<int>> result(m-k+1, vector<int>(n-k+1, 0));
-        
-        for (int i = 0; i <= m-k; i++) {
-            for (int j = 0; j <= n-k; j++) {
-                
-                set<int> vals;
-                
-                for (int r = i; r <= i + k - 1; r++) {
-                    for (int c = j; c <= j + k - 1; c++) {
-                        vals.insert(grid[r][c]);
-                    }
+        vector<vector<int>> ans(m - k + 1, vector<int>(n - k + 1, 0));
+
+        for (int i = 0; i + k <= m; i++) {
+            for (int j = 0; j + k <= n; j++) {
+                // function to check
+                if (k == 1) {
+                    ans[i][j] = 0;
+                } else {
+                    helper(i, j, k, ans, grid);
                 }
-                
-                
-                if (vals.size() == 1) {
-                    continue;
-                }
-                
-                int minAbsDiff = INT_MAX;
-                auto prev = vals.begin();
-                auto curr = next(prev);
-                
-                while (curr != vals.end()) {
-                    minAbsDiff = min(minAbsDiff, *curr - *prev);
-                    prev = curr;
-                    curr++;
-                }
-                
-                result[i][j] = minAbsDiff;
             }
         }
-        
-        return result;
+
+        return ans;
     }
 };
-
