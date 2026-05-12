@@ -13,12 +13,12 @@ public:
     int minimumEffort(vector<vector<int>>& tasks) {
         int n = tasks.size();
         int s =0;
-        int e = 0;
+        int e = 1e9;
 
-        for(auto &p:tasks){
-            s+=p[0];
-            e+=p[1];
-        }
+        // for(auto &p:tasks){
+        //     s+=p[0];
+        //     e+=p[1];
+        // }
         int ans =INT_MAX;
 
         auto lambda = [](auto task1, auto task2){
