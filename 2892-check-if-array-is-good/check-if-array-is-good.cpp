@@ -1,33 +1,26 @@
 class Solution {
 public:
     bool isGood(vector<int>& nums) {
-        int n = *max_element(nums.begin(), nums.end());
+        int n = nums.size();
+        if(n==1) return false;
+        sort(nums.begin(),nums.end());
 
-        
-        if(nums.size() != n + 1) {
+        if(nums[n-1]!=nums[n-2]) return false;
+
+        if(n==2){
+            if( nums[0]== 1) return true;
+            else return false;
+        } 
+
+        if(nums[0]!=1){
             return false;
         }
 
-        vector<int> freq(n + 1, 0);
-
-        for(int x : nums) {
-
-           
-            if(x < 1 || x > n) {
-                return false;
-            }
-
-            freq[x]++;
-        }
-
-        
-        for(int i = 1; i < n; i++) {
-            if(freq[i] != 1) {
+        for(int i=0;i<=n-3;i++){
+            if(nums[i]+1 !=nums[i+1]){
                 return false;
             }
         }
-
-        
-        return freq[n] == 2;
+        return true;
     }
 };
