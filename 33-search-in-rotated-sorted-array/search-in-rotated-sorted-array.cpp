@@ -1,43 +1,34 @@
 class Solution {
 public:
-    int bsearch(vector<int>& nums, int l, int r, int target) {
-
-        while (l <= r) {
-            int mid = l + (r - l) / 2;
-
-            if (nums[mid] < target) {
-                l = mid + 1;
-            } else if (nums[mid] > target) {
-                r = mid - 1;
-            } else {
+    int binarysearch(vector<int>& nums, int target, int s, int e) {
+        while (s <= e) {
+            int mid = s + (e - s) / 2;
+            if (nums[mid] == target) {
                 return mid;
+            }
+            if (nums[mid] < target) {
+                s = mid + 1;
+            } else {
+                e = mid - 1;
             }
         }
         return -1;
     }
     int search(vector<int>& nums, int target) {
-        int p = -1;
-        int n = nums.size();
-        int l = 0;
-        int r = n - 1;
-
-        // finding pivot index
-        while (l < r) {
-            int mid = l + (r - l) / 2;
-
-            if (nums[mid] > nums[r]) {
-                l = mid + 1;
+        int s = 0;
+        int e = nums.size() - 1;
+        //finding the point where it is divided
+        while (s < e) {
+            int mid = s + (e - s) / 2;
+            if (nums[mid] > nums[e]) {
+                s = mid + 1;
             } else {
-                r = mid;
+                e = mid ;
             }
         }
-
-        p = r;
-
-        // calling binary search on both part
-        int s1 = bsearch(nums, 0, p - 1, target);
-        int s2 = bsearch(nums, p, n - 1, target);
-
-        return max(s1, s2);
+        int r1 = binarysearch(nums, target, 0, s-1);
+        if (r1 != -1)
+            return r1;
+        return binarysearch(nums, target, s, nums.size() - 1);
     }
 };
