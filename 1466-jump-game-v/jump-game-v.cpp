@@ -1,38 +1,36 @@
 class Solution {
 public:
-    int t[1001];
-    
-    int solve(int i,vector<int>& arr, int d,int n){
-        if(i>=n || i<0) return 0;
-        if(t[i]!=-1){
-            return t[i];
+   
+    int maxJumps(vector<int>& arr, int d) {
+        int n = arr.size();
+        vector<int> t(n, 1); //vec[i] store max indx cover from i 
+        int fans = 0;
+        vector<pair<int,int>> vec;
+        for(int i=0;i<n;i++){
+            vec.push_back({arr[i],i});
         }
-        int left = 0;
-        for(int id=1;id<=d;id++){
-            int next_i = i-id;
-            if(next_i<0 ||  arr[next_i]>=arr[i]) break;
-                left = max(left,solve(i-id,arr,d,n));
+        sort(vec.begin(),vec.end(),[](pair<int,int>&p1,pair<int,int>&p2){
+            return p1.first<p2.first;
+        });
+
+        for (int i = 0; i < n; i++) {
+            int idx = vec[i].second;
+
             
+            for (int j = idx - 1; j >= max(0, idx - d); j--) {
+                if (arr[j] >= arr[idx])
+                    break;
+                t[idx] = max(t[idx], 1 + t[j]);
+            }
+            for (int j = idx + 1; j <= min(n-1, idx + d); j++) {
+                if (arr[j] >= arr[idx])
+                    break;
+                t[idx] = max(t[idx], 1 + t[j]);
+            }
             
-        }
-        
-        int right = 0;
-        for(int id=1;id<=d;id++){
-            int next_i = i+id;
-            if(next_i>=n || arr[next_i]>=arr[i]) break;
-                right = max(right,solve(i+id,arr,d,n));
-            
+            fans = max(fans, t[idx]);
         }
 
-        return t[i] = 1+ max(left,right);
-    }
-    int maxJumps(vector<int>& arr, int d) {
-        memset(t, -1, sizeof(t));
-        int n = arr.size();
-        int result = 0;
-        for(int i=0;i<n;i++){
-            result = max(result,solve(i,arr,d,n));
-        }
-        return result;
+        return fans;
     }
 };
