@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int t[1001][1001];
+    int t[1001];
     bool check(int i,vector<int>& arr,int s,int e){
         //if(s<0 || e>=n) return 
         for(int j=s;j<=e;j++){
@@ -10,8 +10,8 @@ public:
     }
     int solve(int i,vector<int>& arr, int d,int n){
         if(i>=n || i<0) return 0;
-        if(t[i][d]!=-1){
-            return t[i][d];
+        if(t[i]!=-1){
+            return t[i];
         }
         int left = 0;
         for(int id=1;id<=d;id++){
@@ -29,7 +29,7 @@ public:
             
         }
 
-        return t[i][d] = 1+ max(left,right);
+        return t[i] = 1+ max(left,right);
     }
     int maxJumps(vector<int>& arr, int d) {
         memset(t, -1, sizeof(t));
