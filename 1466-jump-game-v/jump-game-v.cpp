@@ -1,13 +1,7 @@
 class Solution {
 public:
     int t[1001];
-    bool check(int i,vector<int>& arr,int s,int e){
-        //if(s<0 || e>=n) return 
-        for(int j=s;j<=e;j++){
-            if(arr[j]>=arr[i]) return false;
-        }
-        return true;
-    }
+    
     int solve(int i,vector<int>& arr, int d,int n){
         if(i>=n || i<0) return 0;
         if(t[i]!=-1){
@@ -15,17 +9,18 @@ public:
         }
         int left = 0;
         for(int id=1;id<=d;id++){
-            if(i-id>=0 && arr[i-id]<arr[i] && check(i,arr,i-id+1,i-1) ){
+            int next_i = i-id;
+            if(next_i<0 ||  arr[next_i]>=arr[i]) break;
                 left = max(left,solve(i-id,arr,d,n));
-            }
+            
             
         }
         
         int right = 0;
         for(int id=1;id<=d;id++){
-            if(i+id<n && arr[i+id]<arr[i] && check(i,arr,i+1,i+id-1)){
+            int next_i = i+id;
+            if(next_i>=n || arr[next_i]>=arr[i]) break;
                 right = max(right,solve(i+id,arr,d,n));
-            }
             
         }
 
