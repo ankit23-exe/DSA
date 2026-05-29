@@ -6,10 +6,11 @@ public:
     void bfs(int i,int j,vector<vector<char>>& grid){
         queue<pair<int,int>> que;
         que.push({i,j});
+        grid[i][j]='0';
         while(!que.empty()){
             auto p = que.front();
             que.pop();
-            grid[p.first][p.second]='0';
+            //grid[p.first][p.second]='0';
             for(auto &d:direction){
                 int newi = p.first+d[0];
                 int newj = p.second+d[1];
