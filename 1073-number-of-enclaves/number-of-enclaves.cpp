@@ -6,7 +6,7 @@ public:
     void dfs(int i, int j,vector<vector<int>>& grid) {
         grid[i][j]=0;
         
-        for (auto d : direction) {
+        for (auto &d : direction) {
             int newi = i+d[0];
             int newj = j+d[1];
             if (newi>=0 && newi<m && newj>=0 && newj<n) {
