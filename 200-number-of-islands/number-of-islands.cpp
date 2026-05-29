@@ -16,7 +16,7 @@ public:
                 if(newi>=0 && newi<m && newj >=0 && newj <n){
                     if(grid[newi][newj]=='1'){
                         que.push({newi,newj});
-                        grid[newi][newj]=0;
+                        grid[newi][newj]='0';
                     }
                 }
             }
