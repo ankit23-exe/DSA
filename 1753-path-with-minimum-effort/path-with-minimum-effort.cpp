@@ -1,7 +1,7 @@
 class Solution {
 public:
     int m, n;
-    vector<vector<int>> directions = {
+    int directions[4][2] = {
         {0, -1}, // Left
         {-1, 0}, // Up
         {0, 1},  // Right
@@ -24,15 +24,16 @@ public:
             int j = f.second.second;
             int cost = f.first;
 
+            if (i == m - 1 && j == n - 1) return cost;
+
             for(auto &d:directions){
                 int newi = i+d[0];
                 int newj = j+d[1];
                 if(newi<0 || newj<0 || newi>=m || newj>=n) continue;
-                int v1 = cost;
-                int v2 = abs(heights[newi][newj]-heights[i][j]);
-                if(max(v1,v2)<visited[newi][newj]){
-                    visited[newi][newj]=max(v1,v2);
-                    pq.push({max(v1,v2),{newi,newj}});
+                int effort = max(cost, abs(heights[newi][newj] - heights[i][j]));
+                if(effort<visited[newi][newj]){
+                    visited[newi][newj]=effort;
+                    pq.push({effort,{newi,newj}});
                 }
             }
         }
