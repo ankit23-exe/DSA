@@ -6,14 +6,16 @@ public:
         int cursum = 0;
         for(int i=0;i<n;i++){
             cursum +=nums[i];
+            
+            sum= max(sum,cursum); 
+
             if(cursum<0){
                 cursum=0;
-            }
-            sum= max(sum,cursum);   
+            }  
         }
-        if(sum==0){
-            return *max_element(nums.begin(),nums.end());
-        }
+        // if(sum==0){
+        //     return *max_element(nums.begin(),nums.end());
+        // }
         return sum;
     }
 };
