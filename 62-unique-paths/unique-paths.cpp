@@ -1,26 +1,27 @@
 class Solution {
 public:
-    int uniquePaths(int m, int n) {
-        vector<vector<int>> grid (m,vector<int> (n,0));
-        grid[0][0]=1;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(i==0 && j==0)
-                    continue;
-                
-                int curval =0;
-                if(i-1>=0){
-                    curval +=grid[i-1][j];
-                }
-                if(j-1>=0){
-                    curval +=grid[i][j-1];
-                }
-                
-                grid[i][j]=curval;
-                
-            }
+    int t[101][101];
+    int solve(int m,int n,int i,int j){
+        if(i==m-1&&j==n-1){
+            return 1;
         }
-
-        return grid[m-1][n-1];
+        if(i>=m||j>=n||i<0||j<0){
+            return 0;
+        }
+        if(t[i][j]!=-1) return t[i][j];
+        
+        int down =0;
+        int right =0;
+        if(i+1<m){
+            down = solve(m,n,i+1,j);
+        }
+        if(j+1<n){
+            right = solve(m,n,i,j+1);
+        }
+        return t[i][j]= down+right;
+    }
+    int uniquePaths(int m, int n) {
+        memset(t,-1,sizeof(t));
+        return solve(m,n,0,0);
     }
 };
