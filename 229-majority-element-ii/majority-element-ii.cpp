@@ -1,46 +1,47 @@
 class Solution {
 public:
     vector<int> majorityElement(vector<int>& nums) {
-        int num1= NULL;
-        int count1=0;
-        int num2= NULL;
-        int count2=0;
+        int n = nums.size();
+        
+        int maj1    = NULL;
+        int count1 = 0;
 
-        for(int i=0;i<nums.size();i++){
-            if(nums[i]==num1){
+        int maj2    = NULL;
+        int count2 = 0;
+        int freq = floor(n/3);
+        
+        for(int i = 0; i<n; i++) {
+            if(nums[i] == maj1)
                 count1++;
-            }else if(nums[i]==num2){
+            else if(nums[i] == maj2)
                 count2++;
-            }else if(count1==0){
-                num1=nums[i];
-                count1=1;
-
-            }else if(count2==0){
-                num2=nums[i];
-                count2=1;
-
-            }else{
-                count1--;count2--;
+            else if(count1 == 0) {
+                maj1 = nums[i];
+                count1 = 1;
+            } else if(count2 == 0) {
+                maj2 = nums[i];
+                count2 = 1;
+            } else {
+                count1--;
+                count2--;
             }
         }
-        //verify krna hoga
-        count1=0;
-        count2=0;
-        for(int i=0;i<nums.size();i++){
-            if(num1==nums[i]){
+        
+        vector<int> result; 
+        count1 = 0;
+        count2 = 0;
+        for(int num:nums) {
+            if(num == maj1)
                 count1++;
-            }else if(num2==nums[i]){
+            else if(num == maj2)
                 count2++;
-
-            }
-
         }
-        vector<int> ans;
+        if(count1 > floor(n/3))
+            result.push_back(maj1);
+        if(count2 > floor(n/3))
+            result.push_back(maj2);
+        return result;
 
-        if(count1>(nums.size()/3)) ans.push_back(num1);
 
-        if(count2>(nums.size()/3)) ans.push_back(num2);
-
-        return ans;
     }
 };
