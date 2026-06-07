@@ -14,24 +14,28 @@ public:
     TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
         unordered_map<int,TreeNode*> mp;
         unordered_set<int> childs;
-        for(auto &d:descriptions){
-            TreeNode* root = nullptr;
-            if(!mp.count(d[0])){
-                root = new TreeNode(d[0]);
-            }else{
-                root = mp[d[0]];
-            }
-            TreeNode* kid = nullptr;
-            if(d[2]){
-                root->left=mp.count(d[1])?mp[d[1]]:(kid = new TreeNode(d[1]));
-            }else{
-                root->right=mp.count(d[1])?mp[d[1]]:(kid = new TreeNode(d[1]));
-            }
-            if(!mp.count(d[1]))
-                mp[d[1]] = kid;
-            childs.insert(d[1]);
-            mp[d[0]] = root;
 
+        for(auto &d:descriptions){
+            int p_val = d[0];
+            int c_val = d[1];
+
+            TreeNode* p = nullptr;
+            TreeNode* c = nullptr;
+
+            p=mp.count(p_val)?mp[p_val]:  new TreeNode(p_val);
+            c=mp.count(c_val)?mp[c_val]:  new TreeNode(c_val);
+
+            mp[p_val]=p;
+            mp[c_val]=c;
+
+            if(d[2]){
+                mp[p_val]->left = mp[c_val];
+            }else{
+                mp[p_val]->right = mp[c_val];
+            }
+            
+
+            childs.insert(c_val);
         }
 
         for(auto &p:mp){
@@ -39,6 +43,6 @@ public:
                 return p.second;
             }
         }
-        return 0;
+        return new TreeNode(1);
     }
 };
