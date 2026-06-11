@@ -1,38 +1,74 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 public:
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        
+    ListNode* kNode(ListNode* head, int k) {
+        k--;
         ListNode* temp = head;
-        int count=0;
-        while(count<k){
-            if(temp==nullptr) return head;
-            temp=temp->next;
-            count++;
+
+        while (temp != nullptr && k > 0) {
+            temp = temp->next;
+            k--;
         }
 
-        ListNode* prenode =reverseKGroup(temp,k);
+        return temp;
+    }
 
-        temp =head;
-        count=0;
-        while(count<k){
-            ListNode* nxt = temp->next;
-            temp->next=prenode;
-            prenode=temp;
-            temp=nxt;
-            count++;
+    ListNode* kreverse(ListNode* head) {
+        ListNode* prev = nullptr;
+        ListNode* curr = head;
 
+        while (curr != nullptr) {
+            ListNode* nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
         }
-        return prenode;
-       
+
+        return prev;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+
+        ListNode* temp = head;
+        ListNode* previousNode = nullptr;
+        ListNode* nexthNode = nullptr;
+        ListNode* kthNode = nullptr;
+
+        while (temp != nullptr) {
+
+            kthNode = kNode(temp, k);
+
+            if (kthNode == nullptr) {
+
+                
+                if (previousNode)
+                    previousNode->next = temp;
+
+                return head;
+            }
+
+            nexthNode = kthNode->next;
+            kthNode->next = nullptr;
+
+            ListNode* newHead = kreverse(temp);
+
+            if (temp == head) {
+
+                
+                head = newHead;
+
+            } else {
+
+                if (previousNode)
+                    previousNode->next = newHead;   
+            }
+
+            
+            temp->next = nexthNode;
+
+            previousNode = temp;
+            temp = nexthNode;
+        }
+
+        return head;
     }
 };
