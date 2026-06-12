@@ -9,23 +9,40 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-         ListNode *slow=head;
-        ListNode *fast=head;
+        //detecting cycle first
+        ListNode *slow = head;
+        ListNode *fast = head;
+        ListNode *prev = nullptr;
+        bool cyclefound = false;
         while(fast!=nullptr && fast->next!=nullptr){
             slow=slow->next;
             fast=fast->next->next;
-
-           if (slow == fast) {
-                
-                ListNode *entry = head;
-                while (entry != slow) {
-                    entry = entry->next;
-                    slow = slow->next;
-                }
-                return entry;  // start of cycle
+            if(slow==fast){
+                cyclefound = true;
+                break;
             }
         }
-        return nullptr;
-        
+
+        if(!cyclefound) return nullptr;
+
+        //step 2 finding where it is the connection
+        slow = head;
+        if(slow==fast){ //handling edge case 
+            while(fast->next != slow){
+                fast= fast->next;
+            }
+            fast->next = nullptr;
+            return slow;
+        }else{
+            while(slow!=fast){
+                prev = slow;
+                slow=slow->next;
+                fast = fast->next;
+                if(slow==fast) break;
+            }
+        }
+        prev = nullptr;
+        return slow;
+
     }
 };
