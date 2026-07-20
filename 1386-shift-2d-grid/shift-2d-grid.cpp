@@ -5,28 +5,29 @@ public:
         int m = grid.size();
         int n = grid[0].size();
         k%=m*n;
-        vector<int>numbers;
+        int total = m*n;
+        if(k==0) return grid;
 
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                numbers.push_back(grid[i][j]);
+
+        auto reverse =[&](int i ,int j){
+            while(i<j){
+                int rowi= i/n;
+                int coli =i%n;
+
+                int rowj= j/n;
+                int colj = j%n;
+
+                swap(grid[rowi][coli],grid[rowj][colj]);
+                i++;
+                j--;
+                
             }
-        }
-        // for(int i=0;i<m*n;i++){
-        //     numbers[(i+k)%(m*n)]=numbers[i];
-        // }
-        reverse(numbers.begin(),numbers.end());
-        reverse(numbers.begin(),numbers.begin()+k);
-        reverse(numbers.begin()+k,numbers.end());
-
-        int idx =0;
-
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                grid[i][j]=numbers[idx++];
-            }
-        }
+        };
+        reverse(0,total-1);
+        reverse(0,k-1);
+        reverse(k,total-1);
 
         return grid;
+        
     }
 };
