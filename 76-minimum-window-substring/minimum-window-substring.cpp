@@ -1,46 +1,65 @@
 class Solution {
 public:
+    bool compare(vector<int>& vecS, vector<int>& vecT) {
+        for (int i = 0; i < 125; i++) {
+            if (vecT[i] > vecS[i])
+                return false;
+        }
+        return true;
+    }
     string minWindow(string s, string t) {
-        if (t.size() > s.size())
+        int m = s.size();
+        int n = t.size();
+        if (n > m)
             return "";
-        unordered_map<char, int> map;
-        for (char& c : t) {
-            map[c]++;
+
+        vector<int> vecT(125);
+        vector<int> vecS(125);
+
+        string ans;
+        string ansfinal;
+        int minlen = INT_MAX ;
+        int left =0;
+
+            // processing string t
+        for (int i = 0; i < t.size(); i++) {
+            vecT[t[i]]++;
         }
-        int countRequired = t.size();
-        int i = 0, j = 0;
-        int minWindow = INT_MAX;
-        int start_idx = 0;
-        int curWindow = 0;
 
-        while (j < s.size()) {
+        // generating all possible window in s
+        for (int i = 0; i < n; i++) {
+            vecS[s[i]]++;
+            ans += s[i];
+        }
+        if (compare(vecS, vecT))
+            return ans;
 
-            if (map[s[j]] > 0)
-                countRequired--;
-            map[s[j]]--;
+        for (int i = n; i < m; i++) {
+            vecS[s[i]]++;
 
-            // shringking window if we found
+            ans += s[i];
+            if (compare(vecS, vecT)) {
 
-            // shrinking krta hai
-            while ( countRequired == 0) {
-                curWindow = j-i+1;
-                if (curWindow<minWindow) {
-                    minWindow = curWindow;
-                    start_idx = i;
+                if (ans.size() < minlen) {
+                    ansfinal = ans;
+                    minlen = ans.size();
+
                 }
+                while (compare(vecS, vecT)) {
+                    vecS[s[left]]--;   // <-- Fixed
+                    ans.erase(0, 1);
+                    left++;            
 
-                map[s[i]]++;
-                if (map[s[i]] > 0) {
-                    countRequired++;
+                    if (compare(vecS, vecT)) {
+                        if (ans.size() < minlen) {
+                            ansfinal = ans;
+                             minlen = ans.size();
+                        }
+                    }
                 }
-                i++;
             }
-
-            j++;
         }
 
-        if (minWindow == INT_MAX)
-            return "";
-        return s.substr(start_idx, minWindow);
+        return ansfinal;
     }
 };
