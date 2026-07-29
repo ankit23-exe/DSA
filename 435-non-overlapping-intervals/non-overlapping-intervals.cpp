@@ -3,7 +3,7 @@ public:
     int eraseOverlapIntervals(vector<vector<int>>& intervals) {
         int removed = 0;
         int n = intervals.size();
-        auto comparator =[](vector<int>p1,vector<int>p2){
+        auto comparator =[](vector<int>&p1,vector<int>&p2){
             return p1[1]<p2[1];
         };
         sort(intervals.begin(),intervals.end(),comparator);
