@@ -1,18 +1,24 @@
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& nums) {
-        vector<int> t(nums.size(), 1);
-        int maxLIS = 1;
-        int n = nums.size();
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    t[i] = max(t[i], t[j] + 1);
-                    maxLIS = max(maxLIS, t[i]);
-                }
-            }
+    int t[2501][2501];
+    int solve(int idx,int prevIdx,vector<int>& nums){
+        if(idx>=nums.size()){
+            return 0;
         }
-        return maxLIS;
+        if(prevIdx>=0 && t[idx][prevIdx]!=-1) return t[idx][prevIdx];
+        int take = 0;
+        //take
+        if(prevIdx==-1 || nums[prevIdx]<nums[idx])
+            take = 1+solve(idx+1,idx,nums); //take krna ka baad ka max count kitna aa sakta hai
+        //skip 
+        int skip = solve(idx+1,prevIdx,nums); //if we skip toh max count kitna ayega 
+        if(prevIdx>=0) return t[idx][prevIdx] = max(take,skip);
+        return max(take,skip);
+        
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        memset(t,-1,sizeof(t));
+        int prevIdx =-1;
+        return solve(0,prevIdx,nums);
     }
 };
