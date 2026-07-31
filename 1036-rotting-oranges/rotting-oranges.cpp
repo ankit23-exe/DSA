@@ -1,60 +1,54 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int curFresh = 0;
-        queue<pair<int, int>> que; // store the rotten orange idx
         int m = grid.size();
         int n = grid[0].size();
+        int freshCount = 0;
+
+        queue<pair<int, int>> que;
+        vector<vector<int>> direction = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 1) {
-                    curFresh++;
-                }
-                if (grid[i][j] == 2) {
+                if (grid[i][j] == 1)
+                    freshCount++;
+                if (grid[i][j] == 2)
                     que.push({i, j});
-                }
             }
         }
 
-        if (curFresh == 0)
-            return 0;
-        int min = 0;
+        if(freshCount==0) return 0;
+        if(que.empty()) return -1;
+        int timeLapse = 0;
 
-        while (!que.empty()) {
-            ++min;
+        int prevFreshCount =0;
+        while (!que.empty() && freshCount>0) {
+            
             int s = que.size();
+            timeLapse++;
+            prevFreshCount=freshCount;
             while (s--) {
                 auto p = que.front();
                 que.pop();
-                if (p.first - 1 >= 0 && grid[p.first - 1][p.second] == 1) {
-                    --curFresh;
-                    grid[p.first - 1][p.second] = 2;
-                    que.push({p.first - 1, p.second});
+                // traverse in neigh
+                for (auto d : direction) {
+                    int newx = p.first+d[0];
+                    int newy = p.second+d[1];
+                    if (newx < 0 || newy < 0 || newx >= m || newy >= n) {
+                        continue;
+                    }
+                    if (grid[newx][newy] == 1) {
+                        grid[newx][newy] = 2;
+                        freshCount--;
+                        que.push({newx, newy});
+                    }
                 }
-                if (p.first + 1 < m && grid[p.first + 1][p.second] == 1) {
-                    --curFresh;
-                    grid[p.first + 1][p.second] = 2;
-                    que.push({p.first + 1, p.second});
-                }
-                // colum
-                if (p.second - 1 >= 0 && grid[p.first][p.second - 1] == 1) {
-                    --curFresh;
-                    grid[p.first][p.second - 1] = 2;
-                    que.push({p.first, p.second - 1});
-                }
-                if (p.second + 1 < n && grid[p.first][p.second + 1] == 1) {
-                    --curFresh;
-                    grid[p.first][p.second + 1] = 2;
-                    que.push({p.first, p.second + 1});
-                }
-                if (curFresh == 0)
-                break;
             }
-             if (curFresh == 0)
-                break;
-           
+            
+            if(prevFreshCount==freshCount) return -1;
+            
         }
-        if(curFresh!=0) return -1;
-        return min;
+
+        return timeLapse;
     }
 };
