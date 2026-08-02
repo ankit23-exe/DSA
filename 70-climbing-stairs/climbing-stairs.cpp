@@ -1,19 +1,15 @@
 class Solution {
 public:
-    int climbStairs(int n) {
+    int t[46];
+    int solve(int n){
         
-        if(n<3){
-            return n;
-        }
-       
-        int a=1;
-        int b=2;
+        if(n<=2) return n;
+        if(t[n]!=-1) return t[n];
 
-        for(int i =3;i<=n;i++){   //bottom up approach hai
-            int c =b+a;
-            a=b;
-            b=c;
-        }
-        return b;
+        return t[n]=solve(n-1)+solve(n-2);
+    }
+    int climbStairs(int n) {
+        memset(t,-1,sizeof(t));
+        return solve(n);
     }
 };
