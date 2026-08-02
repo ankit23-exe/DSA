@@ -14,7 +14,7 @@ public:
         while(!que.empty()){
             auto [r,c]=que.front();
             que.pop();
-            if(image[r][c]==color) continue;
+    
             image[r][c]=color;
             //generating neigh
             for(auto d:direction){
@@ -24,6 +24,7 @@ public:
                 if(newr<0 || newc <0||newr>=m || newc>=n) continue;
 
                 if(image[newr][newc]==originalColor){
+                     image[newr][newc]=color; 
                     que.push({newr,newc});
                 }
             }
