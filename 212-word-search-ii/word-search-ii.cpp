@@ -1,93 +1,80 @@
 class Solution {
 public:
-    int m,n;
+    vector<vector<int>> direction = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     vector<string> ans;
-
-    vector<vector<int>> direction = {{-1,0},{0,1},{1,0},{0,-1}};
-
-    struct trieNode{
+    struct trieNode {
+        bool endOfWord;
         string word;
-        bool wordend;
         trieNode* children[26];
     };
-
-    trieNode* getNode(){
-        trieNode* newNode = new trieNode();
-        newNode->word="";
-        newNode->wordend = false;
-
-        for(int i=0;i<26;i++){
-            newNode->children[i]=NULL;
+    trieNode* getNode() {
+        trieNode* node = new trieNode();
+        node->endOfWord = false;
+        node->word = "";
+        for (int i = 0; i < 26; i++) {
+            node->children[i] = nullptr;
         }
-        return newNode;
+
+        return node;
     }
-    void insert(trieNode* root,string &word){
-        for(int i=0;i<word.size();i++){
-            char ch = word[i];
-            if(root->children[ch-'a']==NULL){
-                trieNode* newNode = getNode();
-                root->children[ch-'a']=newNode;
+
+    void insertWord(trieNode* root, string word) {
+        trieNode* temp = root;
+        for (int i = 0; i < word.size(); i++) {
+            if (temp->children[word[i] - 'a'] == nullptr) {
+                temp->children[word[i] - 'a'] = getNode();
             }
-            root=root->children[ch-'a'];
+            temp = temp->children[word[i] - 'a'];
         }
-        root->wordend = true;
-        root->word = word;
+        temp->endOfWord = true;
+        temp->word = word;
     }
 
-
-    void dfs(trieNode* root,int i,int j,vector<vector<char>>& board){
-        if(i>=m || j>=n || i<0 || j<0){
+    void findTrieNode(trieNode* root, int i, int j,
+                      vector<vector<char>>& board) {
+        if (board[i][j] == '$' || root->children[board[i][j] - 'a'] == nullptr)
             return;
-        }
-        if(board[i][j]=='$') return;
 
-        
-        if(root->wordend == true){
+        root = root->children[board[i][j] - 'a'];
+
+        if (root->endOfWord) {
             ans.push_back(root->word);
-            root->wordend = false;
-
+            root->endOfWord = false;
         }
-        char temp  = board[i][j];
-        board[i][j]='$';
-        //all 4 ways, but we need to make sure waha na jaya jaha sa aya hai
-        
-        for(int d=0;d<4;d++){
-            int newi = i + direction[d][0];
-            int newj = j + direction[d][1];
 
-            if(newi>=m || newj>=n || newi<0 || newj<0) continue;
+        char temp = board[i][j];
+        board[i][j] = '$';
 
-            char newch = board[newi][newj];
-            if(newch == '$') continue;
-           
-            if(root->children[newch-'a']!=NULL){
-                dfs(root->children[newch-'a'],newi,newj,board);
-            }
-
+        // now move forward and do dfs
+        for (auto& d : direction) {
+            int newi = i + d[0];
+            int newj = j + d[1];
+            if (newi < 0 || newj < 0 || newi >= m || newj >= n ||
+                board[newi][newj] == '$')
+                continue;
+            findTrieNode(root, newi, newj, board);
         }
-        board[i][j]=temp;
-        
+
+        board[i][j] = temp;
     }
 
-
-    
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+    int m, n;
+    vector<string> findWords(vector<vector<char>>& board,
+                             vector<string>& words) {
         m = board.size();
         n = board[0].size();
-        //root create 
+
         trieNode* root = getNode();
-        //creating the trie tree of words
-        for(int i=0;i<words.size();i++){
-            insert(root,words[i]);
+
+        for (auto& w : words) {
+            insertWord(root, w);
         }
 
-        //traverse all matrix element and check if its present in it or not 
-        for(int i=0;i<m;i++){
-            for(int j = 0;j<n;j++){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 char ch = board[i][j];
-                
-                if(root->children[ch-'a']!=NULL){
-                    dfs(root->children[ch-'a'],i,j,board);
+                if (root->children[ch - 'a'] != nullptr) {
+                    findTrieNode(root, i, j, board);
                 }
             }
         }
