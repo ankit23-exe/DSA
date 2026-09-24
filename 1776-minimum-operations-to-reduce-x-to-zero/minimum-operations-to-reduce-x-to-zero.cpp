@@ -1,39 +1,20 @@
 class Solution {
 public:
-    int minOperations(vector<int>& nums, int x) {
+    int minOperations(vector<int>& A, int x) {
+        int k = reduce(A.begin(), A.end()) - x, n = A.size();
+        if (k < 0) return -1;
+        if (k == 0) return n;
 
-        int n=nums.size();
-        unordered_map<int,int> map;
-        int sum=0;
+        int best = -1, i = 0, sum = 0;
+        for (int j = 0; j < n; j++) {
+            sum += A[j];
+            while (sum > k)
+                sum -= A[i++];
 
-        int longestlen=INT_MIN;
-        
-        map[0]=-1;
-
-        for(int i=0;i<n;i++){
-            sum+=nums[i];
-            map[sum]=i;
+            if (sum == k)
+                best = max(best, j - i + 1);
         }
 
-        if(sum<x){
-            return -1;
-        }
-        int target=sum-x;
-        sum=0;
-        for(int i=0;i<n;i++){
-            sum+=nums[i];
-            int findsum=sum-target;
-
-            if(map.find(findsum)!=map.end()){
-
-                longestlen=max(longestlen,i-map[findsum]);
-
-            }
-        }
-
-        return longestlen==INT_MIN ?-1:n-longestlen;
-
-        
-        
+        return best + 1 ? n - best : -1;
     }
 };
